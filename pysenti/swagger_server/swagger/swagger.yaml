@@ -1,0 +1,76 @@
+---
+swagger: "2.0"
+info:
+  description: "Get insights into customer service communication"
+  version: "1.0.0"
+  title: "Customer Service Analytics API"
+host: "api.custanalytics.com"
+basePath: "/v1"
+schemes:
+- "http"
+- "https"
+paths:
+  /analytics:
+    post:
+      tags:
+      - "Analytics"
+      summary: "Customer Service Text Analytics"
+      description: "The Analytics endpoint returns both the sentiment and suggested\
+        \ response for a customer service text.\n"
+      operationId: "text_analytics"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "analysis_request"
+        description: "The customer's serve text in base64 encoding"
+        required: true
+        schema:
+          $ref: "#/definitions/AnalysisRequest"
+      responses:
+        200:
+          description: "An analysis response with a sentiment score and suggested\
+            \ service response."
+          schema:
+            $ref: "#/definitions/AnalysisResponse"
+        default:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.analytics_controller"
+definitions:
+  AnalysisRequest:
+    type: "object"
+    properties:
+      customer-text:
+        type: "string"
+        description: "The text that the customer has sent to customer service"
+      language-code:
+        type: "string"
+        description: "The language code of the customer-text in ISO 639-1 format (2\
+          \ letter code)"
+  AnalysisResponse:
+    type: "object"
+    properties:
+      sentiment-score:
+        type: "number"
+        description: "A sentiment analysis of the input text on a scale from 0 to\
+          \ 1, with 0 being very unhappy and 1 being very happy."
+      suggested-response:
+        type: "string"
+        description: "Suggested response to the customer service text."
+      suggested-response-score:
+        type: "number"
+        description: "The confidence score of the suggested response."
+  Error:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
+      fields:
+        type: "string"

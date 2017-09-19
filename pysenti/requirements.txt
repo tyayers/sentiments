@@ -1,0 +1,7 @@
+connexion == 1.1.9
+python_dateutil == 2.6.0
+setuptools >= 21.0.0
+Flask-Cors == 3.0.3
+textblob == 0.13.0
+textblob-de == 0.4.2
+
